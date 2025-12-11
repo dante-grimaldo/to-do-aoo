@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Plus, Edit2, Trash2, Check, X } from 'lucide-react'
+import { useState, useEffect } from 'react' 
+import { Plus, Edit2, Trash2, Check, X } from 'lucide-react' // Importar Iconos, lucide es una libreria de svgs
 
 // Define the Todo interface
 interface Todo {
@@ -13,13 +13,13 @@ interface Todo {
 type FilterType = 'all' | 'active' | 'completed'
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [newTodo, setNewTodo] = useState('')
-  const [filter, setFilter] = useState<FilterType>('all')
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editText, setEditText] = useState('')
+  const [todos, setTodos] = useState<Todo[]>([]) //Holds all the todos in the localStorage. Find it in the applications tab in the console.
+  const [newTodo, setNewTodo] = useState('') // Child of the above, holds the current todo you're writing
+  const [filter, setFilter] = useState<FilterType>('all') //Manages the filter logic
+  const [editingId, setEditingId] = useState<string | null>(null)//Grabs the correct note when hitting the edit button
+  const [editText, setEditText] = useState('') //Edit function in itself, it holds the new text we will assign to the to-do
 
-  // Load todos from localStorage on component mount
+  // Load todos from localStorage on component mount = when it runs for the first time
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos')
     if (savedTodos) {
@@ -61,6 +61,21 @@ function App() {
 
   // Toggle todo completion
   const toggleTodo = (id: string) => {
+    setTodos(prev => prev.map(todo => 
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ))
+  }
+
+  const toggleTodo = ('Necesitamos el ID del todo k ya fue, y va a ser en string') => {
+      'Vamos a cambiarle algo al pedo'(
+        de lo que ya teniamos, o prev ( 'vamos a agarrar cada cosa' =>
+          'si la cosa que andamos checando ahorita' == 'es igual que el ID del k ya fue'
+      )
+
+
+
+
+
     setTodos(prev => prev.map(todo => 
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ))
