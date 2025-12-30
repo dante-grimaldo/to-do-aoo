@@ -7,6 +7,7 @@ interface Todo {
   text: string
   completed: boolean
   createdAt: Date
+  pin: boolean
 }
 
 // Define filter types
@@ -20,10 +21,7 @@ function App() {
   const [editText, setEditText] = useState('') //Edit function in itself, it holds the new text we will assign to the to-do
   const [pinned, setPinned] = useState<boolean>(false)
 
-  useEffect(() => {
-    const addPin = 
-}
-)
+  
 
   // Load todos from localStorage on component mount = when it runs for the first time
   useEffect(() => {
@@ -58,7 +56,8 @@ function App() {
       id: generateId(),
       text: newTodo.trim(),
       completed: false,
-      createdAt: new Date()
+      createdAt: new Date(),
+      pin: false
     }
 
     setTodos(prev => [todo, ...prev])
@@ -72,6 +71,14 @@ function App() {
       // ...todo nos copia el "juice" del objecto sin la cascara de {}. Copiamos todo, MENOS completed, que volteamos: (!) NEGATIVO>todo.completed. Si es true = false, si es false = true;
     ))
   }
+
+  const togglePin = (id: string) => {
+    setTodos(prev => prev.map(todo =>
+    todo.id === id ? {...todo, pin: !todo.pin } : todo 
+  ))  
+  
+  }
+  
 
   // Delete todo
   const deleteTodo = (id: string) => { //declaramos deleteTodo, y necesitamos igual el id "click". Y va a llegar en forma de string
