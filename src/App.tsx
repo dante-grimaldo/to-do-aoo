@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react' 
-import { Plus, Edit2, Trash2, Check, X } from 'lucide-react' // Importar Iconos, lucide es una libreria de svgs
+import { Plus, Edit2, Trash2, Check, X, Pin, PinOff} from 'lucide-react' // Importar Iconos, lucide es una libreria de svgs
 
 // Define the Todo interface
 interface Todo {
@@ -18,6 +18,12 @@ function App() {
   const [filter, setFilter] = useState<FilterType>('all') //Manages the filter logic
   const [editingId, setEditingId] = useState<string | null>(null)//Grabs the correct note when hitting the edit button
   const [editText, setEditText] = useState('') //Edit function in itself, it holds the new text we will assign to the to-do
+  const [pinned, setPinned] = useState<boolean>(false)
+
+  useEffect(() => {
+    const addPin = 
+}
+)
 
   // Load todos from localStorage on component mount = when it runs for the first time
   useEffect(() => {
@@ -226,6 +232,15 @@ function App() {
                     </span>
                   )}
                 </div>
+
+             
+            
+             <button 
+             onClick={() => }> 
+          
+              <Pin className="w-4 h-4" />
+
+             </button>
 
                 {/* Edit Button (only show when not editing) */}
                 {editingId !== todo.id && (
