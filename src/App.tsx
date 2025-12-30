@@ -205,6 +205,19 @@ const togglePin = (id: string) => {
                 >
                   {todo.completed && <Check className="w-3 h-3" />}
                 </button>
+                <button
+                  onClick={() => togglePin(todo.id)}>
+                    
+                  {todo.pin !== true && (
+                   <Pin className="w-3 h-3" />
+                  
+                )}
+                {todo.pin === true && (
+                   <PinOff className="w-3 h-3" />
+                  
+                )}
+
+                </button>
 
                 {/* Todo Text */}
                 <div className="flex-1">
@@ -248,12 +261,7 @@ const togglePin = (id: string) => {
 
              
             
-             <button 
-             onClick={() => }> 
-          
-              <Pin className="w-4 h-4" />
-
-             </button>
+             
 
                 {/* Edit Button (only show when not editing) */}
                 {editingId !== todo.id && (
