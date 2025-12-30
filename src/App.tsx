@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react' 
-import { Plus, Edit2, Trash2, Check, X } from 'lucide-react' // Importar Iconos, lucide es una libreria de svgs
+import { Plus, Edit2, Trash2, Check, X } from 'lucide-react' 
 
 // Define the Todo interface
 interface Todo {
@@ -13,13 +13,13 @@ interface Todo {
 type FilterType = 'all' | 'active' | 'completed'
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]) //Holds all the todos in the localStorage. Find it in the applications tab in the console.
-  const [newTodo, setNewTodo] = useState('') // Child of the above, holds the current todo you're writing
-  const [filter, setFilter] = useState<FilterType>('all') //Manages the filter logic
-  const [editingId, setEditingId] = useState<string | null>(null)//Grabs the correct note when hitting the edit button
-  const [editText, setEditText] = useState('') //Edit function in itself, it holds the new text we will assign to the to-do
+  const [todos, setTodos] = useState<Todo[]>([]) 
+  const [newTodo, setNewTodo] = useState('') 
+  const [filter, setFilter] = useState<FilterType>('all') 
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editText, setEditText] = useState('') 
 
-  // Load todos from localStorage on component mount = when it runs for the first time
+  // Load todos from localStorage
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos')
     if (savedTodos) {
@@ -35,7 +35,7 @@ function App() {
     }
   }, [])
 
-  // Save todos to localStorage whenever todos change
+  // Save todos to localStorage
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [todos])
@@ -60,30 +60,15 @@ function App() {
   }
 
   // Toggle todo completion
-  const toggleTodo = (id: string) => {
+  const toggleTodo = (id: string) => { 
     setTodos(prev => prev.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ))
-  }
-
-  const toggleTodo = ('Necesitamos el ID del todo k ya fue, y va a ser en string') => {
-      'Vamos a cambiarle algo al pedo'(
-        de lo que ya teniamos, o prev ( 'vamos a agarrar cada cosa' =>
-          'si la cosa que andamos checando ahorita' == 'es igual que el ID del k ya fue'
-      )
-
-
-
-
-
-    setTodos(prev => prev.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo 
     ))
   }
 
   // Delete todo
-  const deleteTodo = (id: string) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id))
+  const deleteTodo = (id: string) => { 
+    setTodos(prev => prev.filter(todo => todo.id !== id)) 
   }
 
   // Start editing
@@ -94,7 +79,7 @@ function App() {
 
   // Save edit
   const saveEdit = () => {
-    if (editingId && editText.trim() !== '') {
+    if (editingId && editText.trim() !== '') { 
       setTodos(prev => prev.map(todo => 
         todo.id === editingId ? { ...todo, text: editText.trim() } : todo
       ))
@@ -143,14 +128,14 @@ function App() {
         <form onSubmit={addTodo} className="mb-8">
           <div className="flex gap-2">
             <input
-              type="text"
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
+              type="text" 
+              value={newTodo} 
+              onChange={(e) => setNewTodo(e.target.value)} 
               placeholder="Add a new todo..."
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <button
-              type="submit"
+              type="submit" 
               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
               <Plus className="w-5 h-5" />
@@ -160,10 +145,10 @@ function App() {
 
         {/* Filter Buttons */}
         <div className="flex justify-center gap-2 mb-6">
-          {(['all', 'active', 'completed'] as FilterType[]).map((filterType) => (
+          {(['all', 'active', 'completed'] as FilterType[]).map((filterType) => ( 
             <button
-              key={filterType}
-              onClick={() => setFilter(filterType)}
+              key={filterType} 
+              onClick={() => setFilter(filterType)} 
               className={`px-4 py-2 rounded-lg capitalize transition-colors ${
                 filter === filterType
                   ? 'bg-blue-500 text-white'
@@ -206,9 +191,9 @@ function App() {
                   {editingId === todo.id ? (
                     <div className="flex gap-2">
                       <input
-                        type="text"
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
+                        type="text" 
+                        value={editText} 
+                        onChange={(e) => setEditText(e.target.value)} 
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') saveEdit()
                           if (e.key === 'Escape') cancelEdit()
