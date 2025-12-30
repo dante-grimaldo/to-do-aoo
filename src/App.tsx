@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react' 
-import { Plus, Edit2, Trash2, Check, X } from 'lucide-react' 
+import { Plus, Edit2, Trash2, Check, X } from 'lucide-react' // Importar Iconos, lucide es una libreria de svgs
 
 // Define the Todo interface
 interface Todo {
@@ -13,13 +13,13 @@ interface Todo {
 type FilterType = 'all' | 'active' | 'completed'
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]) 
-  const [newTodo, setNewTodo] = useState('') 
-  const [filter, setFilter] = useState<FilterType>('all') 
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editText, setEditText] = useState('') 
+  const [todos, setTodos] = useState<Todo[]>([]) //Holds all the todos in the localStorage. Find it in the applications tab in the console.
+  const [newTodo, setNewTodo] = useState('') // Child of the above, holds the current todo you're writing
+  const [filter, setFilter] = useState<FilterType>('all') //Manages the filter logic
+  const [editingId, setEditingId] = useState<string | null>(null)//Grabs the correct note when hitting the edit button
+  const [editText, setEditText] = useState('') //Edit function in itself, it holds the new text we will assign to the to-do
 
-  // Load todos from localStorage
+  // Load todos from localStorage on component mount = when it runs for the first time
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos')
     if (savedTodos) {
@@ -35,7 +35,7 @@ function App() {
     }
   }, [])
 
-  // Save todos to localStorage
+  // Save todos to localStorage whenever todos change
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [todos])
@@ -60,15 +60,16 @@ function App() {
   }
 
   // Toggle todo completion
-  const toggleTodo = (id: string) => { 
-    setTodos(prev => prev.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo 
+  const toggleTodo = (id: string) => { //declaramos la funcion toggleTodo, indicamos que vamos a necesitar el id del todo que le estemos dando click y que viene en formato "string"
+    setTodos(prev => prev.map(todo => //SeTodos: Así podemos modificar los todos, Accediendo aquí. Prev nos permite acceder a todos los todos "viejos" por que con simplemente acceder ya estamos "modificando". De "prev" hacemos .map() para coger cada elemento
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo //si el ID del todo "de prev" es el mismo que el ID que llega arriba en id: string, el ID del "click", entonces jalamos a.... (ese es el ?) y si no.... (ese es el : )
+      // ...todo nos copia el "juice" del objecto sin la cascara de {}. Copiamos todo, MENOS completed, que volteamos: (!) NEGATIVO>todo.completed. Si es true = false, si es false = true;
     ))
   }
 
   // Delete todo
-  const deleteTodo = (id: string) => { 
-    setTodos(prev => prev.filter(todo => todo.id !== id)) 
+  const deleteTodo = (id: string) => { //declaramos deleteTodo, y necesitamos igual el id "click". Y va a llegar en forma de string
+    setTodos(prev => prev.filter(todo => todo.id !== id)) //tenemos todos los todos en prev, filtramos.... la condicion si se cumple los mantenemos, si no lo descartamos, y la condicion es !== que es "Si NO es igual a" en este caso, el "click" id, entonces filtralo como PASSED y mantenlo. si no, drop it
   }
 
   // Start editing
@@ -79,7 +80,7 @@ function App() {
 
   // Save edit
   const saveEdit = () => {
-    if (editingId && editText.trim() !== '') { 
+    if (editingId && editText.trim() !== '') { //Si tenemos algo en editing id, o sea "click" id, y si el texto editado no esta vacio...
       setTodos(prev => prev.map(todo => 
         todo.id === editingId ? { ...todo, text: editText.trim() } : todo
       ))
@@ -128,14 +129,14 @@ function App() {
         <form onSubmit={addTodo} className="mb-8">
           <div className="flex gap-2">
             <input
-              type="text" 
-              value={newTodo} 
-              onChange={(e) => setNewTodo(e.target.value)} 
+              type="text" // Tipo:
+              value={newTodo} // Value 'captura' = newTodo
+              onChange={(e) => setNewTodo(e.target.value)} //OnChange = 'teclazo'. e = event, en este caso, cada 'teclazo'. 'setNewTodo' es literal el texto que escribimos, letra por letra en el input
               placeholder="Add a new todo..."
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <button
-              type="submit" 
+              type="submit" // Magic para triggerear de nuevo input sin tener que usar un onclick complicado, si esta nested junto con un input, lo usaáa.
               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
             >
               <Plus className="w-5 h-5" />
@@ -145,10 +146,10 @@ function App() {
 
         {/* Filter Buttons */}
         <div className="flex justify-center gap-2 mb-6">
-          {(['all', 'active', 'completed'] as FilterType[]).map((filterType) => ( 
+          {(['all', 'active', 'completed'] as FilterType[]).map((filterType) => ( //Aqui hacemos "match" del array (que si estamos creando ahi) asegurando que es no un array corriente si no EL FilterType[] o basado en el
             <button
-              key={filterType} 
-              onClick={() => setFilter(filterType)} 
+              key={filterType} //KEY = "id" para nodos de react
+              onClick={() => setFilter(filterType)} // setFilter to the filterType
               className={`px-4 py-2 rounded-lg capitalize transition-colors ${
                 filter === filterType
                   ? 'bg-blue-500 text-white'
@@ -191,9 +192,9 @@ function App() {
                   {editingId === todo.id ? (
                     <div className="flex gap-2">
                       <input
-                        type="text" 
-                        value={editText} 
-                        onChange={(e) => setEditText(e.target.value)} 
+                        type="text" // Type:
+                        value={editText} // Matches it to the hook and tells react this is no normal input, its the goddam edittext
+                        onChange={(e) => setEditText(e.target.value)} //capture keystrokes
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') saveEdit()
                           if (e.key === 'Escape') cancelEdit()
