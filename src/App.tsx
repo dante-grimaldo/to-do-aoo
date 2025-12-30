@@ -72,13 +72,19 @@ function App() {
     ))
   }
 
-  const togglePin = (id: string) => {
-    setTodos(prev => prev.map(todo =>
-    todo.id === id ? {...todo, pin: !todo.pin } : todo 
-  ))  
-  
+const togglePin = (id: string) => {
+    setTodos(prev => prev.map(todo => {
+      // Check if this is the Todo being clicked
+      if (todo.id === id) {
+        const newPinValue = !todo.pin // Calculate the new value
+        console.log(`Toggling ID: ${id} | New Pin Value:`, newPinValue) // Log it!
+        return { ...todo, pin: newPinValue } // Return the update
+      }
+      
+      // If it's not the one we clicked, just return it as is
+      return todo 
+    }))  
   }
-  
 
   // Delete todo
   const deleteTodo = (id: string) => { //declaramos deleteTodo, y necesitamos igual el id "click". Y va a llegar en forma de string
