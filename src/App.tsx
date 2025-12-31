@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react' 
 import { Plus, Edit2, Trash2, Check, X, Pin, PinOff} from 'lucide-react' // Importar Iconos, lucide es una libreria de svgs
+import { TodoItem } from './components/TodoItem' // Import our new child component
 
 // Define the Todo interface
-interface Todo {
+export interface Todo {
   id: string
   text: string
   completed: boolean
@@ -131,9 +132,9 @@ const togglePin = (id: string) => {
     }
   })
 
-  const pinnedTodos = todos.filter(todo => {
-    todo.pin == true;
-  })
+  // Separate Pinned and Unpinned for display
+  const pinnedTodos = filteredTodos.filter((todo) => todo.pin === true)
+  const otherTodos = filteredTodos.filter((todo) => todo.pin !== true)
 
   // Get counts
   const activeCount = todos.filter(todo => !todo.completed).length
@@ -184,198 +185,70 @@ const togglePin = (id: string) => {
           ))}
         </div>
 
-        {/* Todo List */}
+        {/* Todo List Render */}
         {filteredTodos.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
-              {todos.length === 0 ? 'No todos yet. Add one above!' : 'No todos match this filter.'}
+              {todos.length === 0
+                ? 'No todos yet. Add one above!'
+                : 'No todos match this filter.'}
             </p>
           </div>
         ) : (
-          <div className="space-y-2 mb-6">
-            <h2> Pinned: </h2>
-            {filteredTodos.filter(todo => todo.pin == true).map((todo) => (
-              <div
-                key={todo.id}
-                className="bg-white rounded-lg border border-gray-200 p-4 flex items-center gap-3 hover:shadow-sm transition-shadow"
-              >
-                {/* Checkbox */}
-                <button
-                  onClick={() => toggleTodo(todo.id)}
-                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                    todo.completed
-                      ? 'bg-green-500 border-green-500 text-white'
-                      : 'border-gray-300 hover:border-green-400'
-                  }`}
-                >
-                  {todo.completed && <Check className="w-3 h-3" />}
-                </button>
-                <button
-                  onClick={() => togglePin(todo.id)}>
-                    
-                  {todo.pin !== true && (
-                   <Pin className="w-3 h-3" />
-                  
-                )}
-                {todo.pin === true && (
-                   <PinOff className="w-3 h-3" />
-                  
-                )}
-
-                </button>
-
-                {/* Todo Text */}
-                <div className="flex-1">
-                  {editingId === todo.id ? (
-                    <div className="flex gap-2">
-                      <input
-                        type="text" // Type:
-                        value={editText} // Matches it to the hook and tells react this is no normal input, its the goddam edittext
-                        onChange={(e) => setEditText(e.target.value)} //capture keystrokes
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') saveEdit()
-                          if (e.key === 'Escape') cancelEdit()
-                        }}
-                        className="flex-1 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        autoFocus
-                      />
-                      <button
-                        onClick={saveEdit}
-                        className="p-1 text-green-600 hover:text-green-700"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={cancelEdit}
-                        className="p-1 text-gray-600 hover:text-gray-700"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ) : (
-                    <span
-                      onClick={() => startEditing(todo.id, todo.text)}
-                      className={`cursor-pointer ${
-                        todo.completed ? 'line-through text-gray-500' : 'text-gray-900'
-                      }`}
-                    >
-                      {todo.text}
-                    </span>
-                  
-                    
-                  )}
-
-                                  {editingId !== todo.id && (
-                  <button
-                    onClick={() => startEditing(todo.id, todo.text)}
-                    className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                )}
-
-
-                  <button onClick={() => deleteTodo(todo.id)}
-                  className="p-1 text-gray-400 hover:text-red-500 transition-colors">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                </div>
-          </div>
-        ))}
-
-        <h3> Other... </h3>
-        {filteredTodos.filter(todo => todo.pin !== true).map((todo) => (
-              <div
-                key={todo.id}
-                className="bg-white rounded-lg border border-gray-200 p-4 flex items-center gap-3 hover:shadow-sm transition-shadow"
-              >
-                {/* Checkbox */}
-                <button
-                  onClick={() => toggleTodo(todo.id)}
-                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                    todo.completed
-                      ? 'bg-green-500 border-green-500 text-white'
-                      : 'border-gray-300 hover:border-green-400'
-                  }`}
-                >
-                  {todo.completed && <Check className="w-3 h-3" />}
-                </button>
-                <button
-                  onClick={() => togglePin(todo.id)}>
-                    
-                  {todo.pin !== true && (
-                   <Pin className="w-3 h-3" />
-                  
-                )}
-                {todo.pin === true && (
-                   <PinOff className="w-3 h-3" />
-                  
-                )}
-
-                </button>
-
-                {/* Todo Text */}
-                <div className="flex-1">
-                  {editingId === todo.id ? (
-                    <div className="flex gap-2">
-                      <input
-                        type="text" // Type:
-                        value={editText} // Matches it to the hook and tells react this is no normal input, its the goddam edittext
-                        onChange={(e) => setEditText(e.target.value)} //capture keystrokes
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') saveEdit()
-                          if (e.key === 'Escape') cancelEdit()
-                        }}
-                        className="flex-1 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        autoFocus
-                      />
-                      <button
-                        onClick={saveEdit}
-                        className="p-1 text-green-600 hover:text-green-700"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={cancelEdit}
-                        className="p-1 text-gray-600 hover:text-gray-700"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ) : (
-                    <span
-                      onClick={() => startEditing(todo.id, todo.text)}
-                      className={`cursor-pointer ${
-                        todo.completed ? 'line-through text-gray-500' : 'text-gray-900'
-                      }`}
-                    >
-                      {todo.text}
-                    </span>
-                  )}
-                </div>
-                {/* Edit Button (only show when not editing) */}
-                {editingId !== todo.id && (
-                  <button
-                    onClick={() => startEditing(todo.id, todo.text)}
-                    className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                )}
-
-                {/* Delete Button */}
-                <button
-                  onClick={() => deleteTodo(todo.id)}
-                  className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+          <div className="space-y-6 mb-6">
+            {/* Pinned Section */}
+            {pinnedTodos.length > 0 && (
+              <div className="space-y-2">
+                <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                  Pinned
+                </h2>
+                {pinnedTodos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    isEditing={editingId === todo.id}
+                    editText={editText}
+                    onEditChange={setEditText}
+                    onSave={saveEdit}
+                    onCancel={cancelEdit}
+                    onStartEditing={startEditing}
+                    onToggle={toggleTodo}
+                    onPin={togglePin}
+                    onDelete={deleteTodo}
+                  />
+                ))}
               </div>
-            ))}
-        </div>
+            )}
+
+            {/* Other Section */}
+            {otherTodos.length > 0 && (
+              <div className="space-y-2">
+                {pinnedTodos.length > 0 && (
+                  <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                    Others
+                  </h2>
+                )}
+                {otherTodos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    isEditing={editingId === todo.id}
+                    editText={editText}
+                    onEditChange={setEditText}
+                    onSave={saveEdit}
+                    onCancel={cancelEdit}
+                    onStartEditing={startEditing}
+                    onToggle={toggleTodo}
+                    onPin={togglePin}
+                    onDelete={deleteTodo}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         )}
 
-        {/* Footer with counts and clear button */}
+        {/* Footer */}
         {todos.length > 0 && (
           <div className="flex justify-between items-center text-sm text-gray-600">
             <div className="flex gap-4">
